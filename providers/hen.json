@@ -1,0 +1,29 @@
+{
+  "search": {
+    "url": "https://myanimelist.net/search/all?q=%s",
+    "filter": "#content > div.content-result > div.content-left > div > article > div > div.information.di-tc.va-t.pt4.pl8 > a:nth-child(1)",
+    "fields": {
+      "title": {
+        "type": "text"
+      },
+      "url": {
+        "type": "attr",
+        "name": "href",
+        "replace": ["https://myanimelist.net/anime/", ""]
+      }
+    }
+  },
+  "data": {
+    "url": "https://myanimelist.net/anime/%s",
+    "fields": {
+      "title": {"type": "text", "target": "#contentWrapper > div:nth-child(1) > h1 > span"},
+      "description": {"type": "text", "target": "#content > table > tbody > tr > td:nth-child(2) > div.js-scrollfix-bottom-rel > table > tbody > tr:nth-child(1) > td > span"},
+
+      "poster": {
+        "type": "image",
+        "target": "#content > table > tbody > tr > td.borderClass > div > div:nth-child(1) > a > img",
+        "name": "src"
+      }
+    }
+  }
+}

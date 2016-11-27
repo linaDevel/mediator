@@ -1,0 +1,47 @@
+{
+  "search": {
+    "url": "http://www.brazzers.com/search/all/?q=%s",
+    "filter": "#container > section.section-release-container > div > div > div > div.card-image > a",
+    "fields": {
+      "title": { "type": "attr", "name": "title"},
+      "url": { "type": "attr", "name": "href", "replace": ["/scenes/view/id/", ""] }
+    }
+  },
+  "data": {
+    "url": "http://www.brazzers.com/scenes/view/id/%s",
+    "fields": {
+      "date": { "type": "text", "target": "#container > section.release-player.section-header.clearfix > header > div.more-scene-info > aside" },
+
+      "title": { "type": "text", "target": "#container > section.release-player.section-header.clearfix > header > div.scene-main-info > h1" },
+      "description": { "type": "text", "target": "#scene-description > p" },
+      "category": { "type": "text", "target": "#container > section.release-player.section-header.clearfix > header > div.more-scene-info > a > span.label-text" },
+
+      "models": {
+        "type": "list",
+        "fields": {
+          "name": { "type": "text", "target": "li > div.model-card-wrap > div.model-card > h2.model-card-title > a" },
+          "image": { "type": "attr", "name": "src", "target": "li > div > div.model-card > div > a > img", "replace": ["model-medium", "model-large"] }
+        },
+        "target": "#hd-model-carousel > li"
+      },
+      "tags": {
+        "type": "list",
+        "fields": {
+          "title": { "type": "text", "target": "var"}
+        },
+        "target": "#container > section.release-information > div > div.scene-tour-right > div.content-box.scene-fuck-stats > ul > li > div > a"
+      },
+      "images": {
+        "type": "list",
+        "fields": {
+          "image": {
+            "type": "image",
+            "name": "src",
+            "target": "img"
+          }
+        },
+        "target": "#hdpic-carousel > li > a"
+      }
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "search": {
+    "url": "http://www.digitalplayground.com/search/?q=%s",
+    "filter": "#container > div.search-wrapper.resp > section.resp.dvd.section-search > div > article > div > div.title-bar > div.title-text > h4 > span > a",
+    "fields": {
+      "title": {
+        "type": "text"
+      },
+      "url": {
+        "type": "attr",
+        "name": "href",
+        "replace": ["/movies/info/", ""]
+      }
+    }
+  },
+  "data": {
+    "url": "http://www.digitalplayground.com/movies/info/%s",
+    "fields": {
+      "date": {"type": "text", "target": "#container > section:nth-child(1) > div > aside > div.info-right-side > ul > li:nth-child(1) > span"},
+
+      "title": {"type": "text", "target": "#container > section:nth-child(1) > div > header > h1"},
+      "description": {"type": "text", "target": "#scrollbar1 > div.viewport > div > p"},
+
+      "poster": {"type": "image", "target": "#front-cover", "name": "src"}
+
+      "models": {
+        "type": "list",
+        "fields": {
+          "name": {"type": "text", "target": "div.title-bar > div.title-text > h4 > a"},
+          "image": {"type": "attr", "name": "src", "target": "div.preview-image > a > img", "replace": ["135x182_1", "300x404_1"]}
+        },
+        "target": "#container > section:nth-child(1) > div > aside > div.info-right-side > div > article > div"
+      }
+    }
+  }
+}

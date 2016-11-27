@@ -1,6 +1,4 @@
-package ru.linachan.mediator.common;
-
-import org.json.simple.JSONObject;
+package ru.linachan.mediator.common.data;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -9,17 +7,17 @@ import java.net.URL;
 
 public class Image {
 
-    public final String source;
+    public final String link;
     public final double ratio;
 
     public Image(String image) {
-        source = image;
+        link = image;
         ratio = getAspectRatio();
     }
 
     private double getAspectRatio() {
         try {
-            BufferedImage image = ImageIO.read(new URL(source));
+            BufferedImage image = ImageIO.read(new URL(link));
             return (double) image.getWidth() / (double) image.getHeight();
         } catch (IOException e) {
             return 0f;
@@ -28,16 +26,6 @@ public class Image {
 
     @Override
     public String toString() {
-        return String.format("IMG(%s)=1:%f", source, ratio);
-    }
-
-    @SuppressWarnings("unchecked")
-    public JSONObject toJSON() {
-        JSONObject jsonObject = new JSONObject();
-
-        jsonObject.put("link", source);
-        jsonObject.put("ratio", ratio);
-
-        return jsonObject;
+        return String.format("IMG(%s)=1:%f", link, ratio);
     }
 }

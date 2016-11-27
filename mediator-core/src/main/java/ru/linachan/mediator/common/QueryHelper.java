@@ -23,8 +23,16 @@ public class QueryHelper {
         return select(selector).attr(attr);
     }
 
+    public String selectAttr(String attr) {
+        return data.attr(attr);
+    }
+
     public String selectText(String selector) {
         return select(selector).text();
+    }
+
+    public String selectText() {
+        return ((Element) data).text();
     }
 
     public Element select(String selector) {
