@@ -26,22 +26,27 @@ public class DPSearchHandler implements HttpHandler {
 
         JSONObject response = new JSONObject();
 
-        if (params.containsKey("q")) {
-            JSONArray results = new JSONArray();
+        try {
+            if (params.containsKey("q")) {
+                JSONArray results = new JSONArray();
 
-            for (DPSearch.DPSearchResult result: search.searchByName(params.get("q"))) {
-                JSONObject data = new JSONObject();
+                for (DPSearch.DPSearchResult result: search.searchByName(params.get("q"))) {
+                    JSONObject data = new JSONObject();
 
-                data.put("title", result.title);
-                data.put("link", result.url);
-                data.put("type", result.type.toString().toLowerCase());
+                    data.put("title", result.title);
+                    data.put("link", result.url);
+                    data.put("type", result.type.toString().toLowerCase());
 
-                results.add(data);
+                    results.add(data);
+                }
+
+                response.put("results", results);
+            } else {
+                response.put("results", new JSONArray());
             }
-
-            response.put("results", results);
-        } else {
-            response.put("results", new JSONArray());
+        } catch(Throwable e) {
+            response.put("errType", e.getClass().getName());
+            response.put("errMsg", e.getMessage());
         }
 
         byte[] responseBytes = response.toJSONString().getBytes();

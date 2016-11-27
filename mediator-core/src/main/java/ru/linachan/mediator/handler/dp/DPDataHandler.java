@@ -25,10 +25,15 @@ public class DPDataHandler implements HttpHandler {
 
         JSONObject response = new JSONObject();
 
-        if (params.containsKey("id")) {
-            response.put("data", new DPVideo(params.get("id")).toJSON());
-        } else {
-            response.put("data", null);
+        try {
+            if (params.containsKey("id")) {
+                response.put("data", new DPVideo(params.get("id")).toJSON());
+            } else {
+                response.put("data", null);
+            }
+        } catch(Throwable e) {
+            response.put("errType", e.getClass().getName());
+            response.put("errMsg", e.getMessage());
         }
 
         byte[] responseBytes = response.toJSONString().getBytes();
