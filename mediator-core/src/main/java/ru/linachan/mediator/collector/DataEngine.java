@@ -6,6 +6,8 @@ import ru.linachan.mediator.common.QueryHelper;
 import ru.linachan.mediator.common.data.Image;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -29,10 +31,10 @@ public class DataEngine {
 
     private String replaceIfRequired(JSONObject rule, String data) {
         if (rule.containsKey("replace")&&data != null) {
-            return data.replace(
-                (String) ((JSONArray) rule.get("replace")).get(0),
-                (String) ((JSONArray) rule.get("replace")).get(1)
-            );
+            for (Object replaceRule: (JSONArray) rule.get("replace")) {
+                data = Pattern.compile((String) ((JSONArray) replaceRule).get(0)).matcher(data)
+                    .replaceAll(Matcher.quoteReplacement((String) ((JSONArray) replaceRule).get(1)));
+            }
         }
 
         return data;
@@ -52,15 +54,39 @@ public class DataEngine {
                 Image imageData;
 
                 if (rule.containsKey("name")) {
-                    imageData = new Image(data.selectAttr((String) rule.get("target"), (String) rule.get("name")));
+                    imageData = new Image(replaceIfRequired(
+                        rule, data.selectAttr((String) rule.get("target"), (String) rule.get("name"))
+                    ));
                 } else {
-                    imageData = new Image(data.selectText((String) rule.get("target")));
+                    imageData = new Image(replaceIfRequired(
+                        rule, data.selectText((String) rule.get("target"))
+                    ));
                 }
 
                 image.put("link", imageData.link);
                 image.put("ratio", imageData.ratio);
 
                 return image;
+            case "image_list":
+                JSONArray imageList = new JSONArray();
+                String imageLink = replaceIfRequired(
+                    rule, rule.containsKey("name") ? data.selectAttr((String) rule.get("target"), (String) rule.get("name")) : data.selectText((String) rule.get("target"))
+                );
+
+                for (long index = (Long) rule.get("indexStart"); index <= (Long) rule.get("indexEnd"); index++) {
+                    JSONObject imageInfo = new JSONObject();
+                    Image imageObj = new Image(replaceIfRequired(
+                        rule, Pattern.compile((String) rule.get("index")).matcher(imageLink)
+                            .replaceAll(String.format((String) rule.get("indexFormat"), index))
+                    ));
+
+                    imageInfo.put("link", imageObj.link);
+                    imageInfo.put("ratio", imageObj.ratio);
+
+                    imageList.add(imageInfo);
+                }
+
+                return imageList;
             case "list":
                 JSONArray array = new JSONArray();
                 JSONObject fields = (JSONObject) rule.get("fields");

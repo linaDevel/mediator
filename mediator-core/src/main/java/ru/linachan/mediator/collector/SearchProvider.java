@@ -27,10 +27,12 @@ public class SearchProvider {
         }
 
         if (rule.containsKey("replace")&&value != null) {
-            value = value.replace(
-                (String) ((JSONArray) rule.get("replace")).get(0),
-                (String) ((JSONArray) rule.get("replace")).get(1)
-            );
+            for (Object replacement: (JSONArray) rule.get("replace")) {
+                value = value.replace(
+                    (String) ((JSONArray) replacement).get(0),
+                    (String) ((JSONArray) replacement).get(1)
+                );
+            }
         }
 
         return value;

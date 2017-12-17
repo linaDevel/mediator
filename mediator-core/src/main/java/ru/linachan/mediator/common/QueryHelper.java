@@ -43,4 +43,8 @@ public class QueryHelper {
         return ((Element) data).select(selector);
     }
 
+    @Override
+    public String toString() {
+        return data.toString();
+    }
 }
